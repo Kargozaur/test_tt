@@ -11,7 +11,9 @@ def create_affiliate(affiliate: int) -> str:
         "id": affiliate,
         "exp": dt.datetime.now(dt.UTC) + dt.timedelta(minutes=30),
     }
-    return jwt.encode(payload, settings.jwt.key, algorithm=settings.jwt.alg)
+    return jwt.encode(
+        payload, settings.jwt.key.get_secret_value(), algorithm=settings.jwt.alg
+    )
 
 
 def get_token_data(token: str) -> dict:
@@ -21,7 +23,9 @@ def get_token_data(token: str) -> dict:
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, settings.jwt.key, settings.jwt.alg)
+        payload = jwt.decode(
+            token, settings.jwt.key.get_secret_value(), settings.jwt.alg
+        )
         affiliate_id = payload.get("id")
         if affiliate_id is None:
             raise credential_exc
