@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from services.landings.middleware.token_middleware import JWTAuthMiddleware
 from services.landings.routers import lead_router
+from shared.middleware.token_middleware import JWTAuthMiddleware
 
 app = FastAPI()
 app.include_router(lead_router.router)
