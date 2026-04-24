@@ -1,0 +1,49 @@
+services: 
+  database:
+    image: postgres:18.3-trixie
+    environment:
+      POSTGRES_DB: leads_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    restart: unless-stopped
+    ports: 
+      - "5433:5432"
+    shm_size: 256mb
+    volumes:
+     - db_volume:/var/lib/postgresql
+    networks:
+     - internalNetwork
+
+  redis:
+    image: redis:8.4.0-alpine
+    command: redis-server --appendonly yes
+    networks:
+     - internalNetwork
+    ports:
+      - "6379:6379"
+
+  landings:
+    build:
+      context: .
+      dockerfile: ./services/landings/Dockerfile.landings
+    ports:
+      - "8001:8001"
+    depends_on:
+      - redis
+
+  core:
+    build:
+      context: .
+      dockerfile: ./services/core/Dockerfile.core
+    ports:
+      - "8002:8002"
+    depends_on:
+      - database
+      - redis
+
+networks:
+  internalNetwork:
+    driver: bridge
+
+volumes:
+  db_volume:

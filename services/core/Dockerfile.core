@@ -1,0 +1,25 @@
+FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim as uv-base
+
+FROM uv-base AS deps
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock ./
+
+RUN uv venv /opt/venv && \
+    uv pip install --python /opt/venv/bin/python --no-cache ".[core]"
+
+COPY shared/ ./shared/
+COPY services/core/ ./services/core/
+COPY migrations/ ./migrations/
+COPY alembic.ini ./
+COPY entrypoint.sh ./
+
+ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONPATH=/app
+
+RUN chmod +x entrypoint.sh
+
+EXPOSE 8002
+
+ENTRYPOINT ["./entrypoint.sh"]

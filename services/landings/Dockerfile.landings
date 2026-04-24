@@ -1,0 +1,33 @@
+FROM ghcr.io/astral-sh/uv:python3.14-trixie-slim AS builder
+
+WORKDIR /app
+
+COPY pyproject.toml uv.lock ./
+
+RUN uv venv /opt/venv && \
+    uv pip install --python /opt/venv/bin/python --no-cache ".[core]"
+
+FROM python:3.14.2-slim
+
+WORKDIR /app
+
+COPY --from=builder /opt/venv /opt/venv
+
+COPY shared/ ./shared/
+COPY services/core/ ./services/core/
+COPY migrations/ ./migrations/
+COPY alembic.ini ./
+
+ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONPATH=/app \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_COMPILE_BYTECODE=1
+
+RUN useradd --create-home --shell /bin/bash appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 8001
+
+CMD ["uvicorn", "services.landings.main:app", "--host", "0.0.0.0", "--port", "8001"]
