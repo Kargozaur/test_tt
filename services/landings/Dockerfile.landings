@@ -15,8 +15,6 @@ COPY --from=builder /opt/venv /opt/venv
 
 COPY shared/ ./shared/
 COPY services/core/ ./services/core/
-COPY migrations/ ./migrations/
-COPY alembic.ini ./
 
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONPATH=/app \
