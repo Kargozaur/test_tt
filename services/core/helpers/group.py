@@ -32,7 +32,6 @@ async def group_by_date(
 
     res_dict = {
         "affiliate_id": affiliate_id,
-        "group_by": "date",
         "period": {
             "date_from": start.date().isoformat(),
             "date_to": end.date().isoformat(),
@@ -72,7 +71,6 @@ async def group_by_offer(
 
     res_dict = {
         "affiliate_id": affiliate_id,
-        "group_by": "offer",
         "period": {
             "date_from": start.date().isoformat(),
             "date_to": end.date().isoformat(),
