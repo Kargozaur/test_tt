@@ -17,7 +17,7 @@ async def create_lead(
     lead_data: LeadRequest,
     client: Redis = Depends(get_redis_client),
 ):
-    current_affiliate = request.state.affiliate
+    current_affiliate = request.state.affiliate["id"]
     if current_affiliate["id"] != lead_data.affiliate_id:
         raise HTTPException(
             status_code=403, detail="affiliate_id in request does not match token"
@@ -25,6 +25,4 @@ async def create_lead(
     lead_id = str(uuid.uuid7())
     queue_data = prepare_lead(lead_id, lead_data)
     await client.lpush("leads:queue", json.dumps(queue_data))  # ty:ignore[invalid-await]
-    return LeadResponse(
-        message="Lead accepted and queued for processing", lead_id=lead_id
-    )
+    return LeadResponse(message="Accepted and queued for processing", lead_id=lead_id)
