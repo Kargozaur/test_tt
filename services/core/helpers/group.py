@@ -4,11 +4,12 @@ import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from services.core.models.models import Lead, Offer
+from services.core.schemas.schemas import DateStats, OfferStats
 
 
 async def group_by_date(
     session: AsyncSession, affiliate_id: int, start: dt.datetime, end: dt.datetime
-) -> dict:
+) -> DateStats:
     query = (
         sa.select(
             sa.func.date(Lead.created_at).label("date"),
@@ -29,7 +30,7 @@ async def group_by_date(
     result = await session.execute(query)
     rows = result.all()
 
-    return {
+    res_dict = {
         "affiliate_id": affiliate_id,
         "group_by": "date",
         "period": {
@@ -41,11 +42,12 @@ async def group_by_date(
             for row in rows
         ],
     }
+    return DateStats.model_validate(res_dict)
 
 
 async def group_by_offer(
     session: AsyncSession, affiliate_id: int, start: dt.datetime, end: dt.datetime
-) -> dict:
+) -> OfferStats:
     query = (
         sa.select(
             Offer.id.label("offer_id"),
@@ -68,7 +70,7 @@ async def group_by_offer(
     result = await session.execute(query)
     rows = result.all()
 
-    return {
+    res_dict = {
         "affiliate_id": affiliate_id,
         "group_by": "offer",
         "period": {
@@ -85,3 +87,4 @@ async def group_by_offer(
             for row in rows
         ],
     }
+    return OfferStats.model_validate(res_dict)
