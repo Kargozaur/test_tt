@@ -59,7 +59,7 @@ class LeadWorker:
                 return
 
             lead = Lead(
-                lead_uuid=lead_data["lead_id"],
+                lead_id=lead_data["lead_id"],
                 name=lead_data["name"],
                 phone=lead_data["phone"],
                 country=lead_data["country"],
