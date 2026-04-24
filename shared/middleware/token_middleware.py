@@ -6,7 +6,7 @@ from shared.jwt_handler.handler import get_token_data
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.url.path in ["/", "/docs", "/openapi.json", "/redoc"]:
+        if request.url.path in ["/", "/docs", "/openapi.json", "/redoc", "/health"]:
             return await call_next(request)
 
         auth_header = request.headers.get("Authorization")
