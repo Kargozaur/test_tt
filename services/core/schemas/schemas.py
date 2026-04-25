@@ -9,7 +9,7 @@ class Period(BaseModel):
     date_to: str
 
 
-class Base[T](BaseModel):
+class Base[T: BaseModel](BaseModel):
     affiliate_id: str | UUID
     period: Period
     data: list[T]
