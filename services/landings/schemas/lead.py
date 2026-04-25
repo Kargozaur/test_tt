@@ -1,7 +1,6 @@
 import re
-from typing import Self
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class LeadRequest(BaseModel):
@@ -24,12 +23,6 @@ class LeadRequest(BaseModel):
         if not re.match(r"^[A-Z]{2}$", v.upper()):
             raise ValueError("Country must be ISO 3166-1 alpha-2 format (e.g., UA)")
         return v.upper()
-
-    @model_validator(mode="after")
-    def validate_model(self) -> Self:
-        if not self.country == self.country.upper():
-            self.country = self.country.upper()
-        return self
 
 
 class LeadResponse(BaseModel):
