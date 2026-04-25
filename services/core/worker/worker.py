@@ -98,11 +98,15 @@ class LeadWorker:
         self.running = False
         if self.redis:
             await self.redis.close()
+            self.redis = None
 
 
 async def start_worker():
     worker = LeadWorker()
-    await worker.run()
+    try:
+        await worker.run()
+    except KeyboardInterrupt:
+        await worker.stop()
 
 
 if __name__ == "__main__":

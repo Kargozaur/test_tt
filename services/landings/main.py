@@ -1,7 +1,11 @@
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from services.landings.routers import lead_router
 from shared.middleware.token_middleware import JWTAuthMiddleware
+from shared.redis_client.client import get_redis_client
 
 app = FastAPI()
 app.include_router(lead_router.router)
@@ -16,3 +20,11 @@ async def default():
 @app.get("/health")
 async def get_health():
     return {"status": "ready"}
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator:
+    redis_client = get_redis_client()
+    app.state.redis = redis_client
+    yield
+    await redis_client.close()

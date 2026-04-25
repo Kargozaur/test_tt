@@ -4,18 +4,16 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Request
 from redis.asyncio import Redis
 
+from services.landings.helper.get_redis import get_redis
 from services.landings.helper.prepare_lead import prepare_lead
 from services.landings.schemas.lead import LeadRequest, LeadResponse
-from shared.redis_client.client import get_redis_client
 
 router = APIRouter(prefix="/landings", tags=["leads"])
 
 
 @router.post("/lead", response_model=LeadResponse)
 async def create_lead(
-    request: Request,
-    lead_data: LeadRequest,
-    client: Redis = Depends(get_redis_client),
+    request: Request, lead_data: LeadRequest, client: Redis = Depends(get_redis)
 ):
     current_affiliate = request.state.affiliate["id"]
     if current_affiliate != lead_data.affiliate_id:
