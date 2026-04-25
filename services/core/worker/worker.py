@@ -107,7 +107,9 @@ async def start_worker():
         await worker.run()
     except KeyboardInterrupt:
         await worker.stop()
-
+    except Exception as exc:
+        print(f"Unexpected exception: {exc}")
+        await worker.stop()
 
 if __name__ == "__main__":
     asyncio.run(start_worker())
