@@ -9,7 +9,7 @@ from services.core.helpers.group import group_by_date, group_by_offer
 router = APIRouter(prefix="/leads", tags=["leads"])
 
 
-@router.get("")
+@router.get("", status_code=200)
 async def get_leads_analytics(
     request: Request,
     date_from: dt.date = Query(..., description="Start date (YYYY-MM-DD)"),

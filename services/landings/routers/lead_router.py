@@ -11,7 +11,7 @@ from services.landings.schemas.lead import LeadRequest, LeadResponse
 router = APIRouter(prefix="/landings", tags=["leads"])
 
 
-@router.post("/lead", response_model=LeadResponse)
+@router.post("/lead", response_model=LeadResponse, status_code=200)
 async def create_lead(
     request: Request, lead_data: LeadRequest, client: Redis = Depends(get_redis)
 ):
