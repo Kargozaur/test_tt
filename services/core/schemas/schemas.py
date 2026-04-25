@@ -1,5 +1,4 @@
 from typing import Literal
-from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
@@ -10,9 +9,9 @@ class Period(BaseModel):
 
 
 class Base[T: BaseModel](BaseModel):
-    affiliate_id: str | UUID
+    affiliate_id: int
     period: Period
-    data: list[T]
+    data: list[T] = []
 
     model_config = ConfigDict(from_attributes=True)
 
