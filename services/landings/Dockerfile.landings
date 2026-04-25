@@ -14,13 +14,12 @@ WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv
 
 COPY shared/ ./shared/
-COPY services/core/ ./services/core/
+COPY services/landings/ ./services/landings/
 
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONPATH=/app \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    UV_COMPILE_BYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1
 
 RUN useradd --create-home --shell /bin/bash appuser && \
     chown -R appuser:appuser /app

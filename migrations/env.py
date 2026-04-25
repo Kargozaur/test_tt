@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from services.core.models.models import Affiliate, Lead, Offer
 from shared.models.base import Base
 from shared.settings.settings import settings
 

@@ -20,7 +20,7 @@ class Lead(Base, ID):
         sa.Integer, sa.ForeignKey("affiliates.id"), nullable=False
     )
     created_at: Mapped[dt.datetime] = mapped_column(
-        sa.DateTime(timezone=True), default_factory=lambda: dt.datetime.now(dt.UTC)
+        sa.DateTime(timezone=True), default=lambda: dt.datetime.now(dt.UTC)
     )
 
 

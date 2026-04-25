@@ -15,7 +15,7 @@ async def get_leads_analytics(
     date_from: dt.date = Query(..., description="Start date (YYYY-MM-DD)"),
     date_to: dt.date = Query(..., description="End date (YYYY-MM-DD)"),
     group: str = Query(
-        ..., regex="^(date|offer)$", description="Group by 'date' or 'offer'"
+        ..., pattern="^(date|offer)$", description="Group by 'date' or 'offer'"
     ),
     session: AsyncSession = Depends(get_db),
 ):

@@ -1,6 +1,6 @@
 from pydantic import PostgresDsn
 
-from . import BaseSettings
+from . import BaseSettings, SettingsConfigDict
 
 
 class PostgresSettings(BaseSettings):
@@ -24,3 +24,5 @@ class PostgresSettings(BaseSettings):
                 path=self.database,
             )
         )
+
+    model_config = SettingsConfigDict(env_prefix="POSTGRES_")
