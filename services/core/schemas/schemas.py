@@ -21,7 +21,8 @@ class OfferDataItem(BaseModel):
     offer_name: str
     count: int
     leads: list[str] = []
-
+    
+    model_config = ConfigDict(from_attributes=True)
 
 class OfferStats(Base[OfferDataItem]):
     group_by: Literal["offer"] = "offer"
