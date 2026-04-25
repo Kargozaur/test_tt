@@ -33,6 +33,7 @@ class DateDataItem(BaseModel):
     count: int
     leads: list[str] = []
 
+    model_config = ConfigDict(from_attributes=True)
 
 class DateStats(Base[DateDataItem]):
     group_by: Literal["date"] = "date"
