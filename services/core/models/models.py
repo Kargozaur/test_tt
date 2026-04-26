@@ -10,7 +10,7 @@ from shared.models.base import Base
 class Lead(Base, ID):
     __tablename__ = "leads"
 
-    lead_id: Mapped[str] = mapped_column(sa.String(36), unique=True, nullable=False)
+    lead_id: Mapped[str] = mapped_column(sa.String(36), nullable=False)
     name: Mapped[str] = mapped_column(sa.String(255), nullable=False)
     phone: Mapped[str] = mapped_column(sa.String(20), nullable=False)
     offer_id: Mapped[int] = mapped_column(
