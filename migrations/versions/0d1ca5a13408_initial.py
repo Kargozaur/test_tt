@@ -44,7 +44,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['affiliate_id'], ['affiliates.id'], ),
     sa.ForeignKeyConstraint(['offer_id'], ['offers.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('lead_id')
     )
     # ### end Alembic commands ###
 
