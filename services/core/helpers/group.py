@@ -13,18 +13,18 @@ async def group_by_date(
     query = (
         sa.select(
             sa.func.date(Lead.created_at).label("date"),
-            sa.func.count(Lead.id).label("count"),
-            sa.func.array_agg(Lead.lead_id).label("lead_ids"),
+            sa.func.count(sa.distinct(Lead.id)).label("count"),
+            sa.func.array_agg(sa.distinct(Lead.lead_id)).label("lead_ids"),
         )
         .where(
             sa.and_(
                 Lead.affiliate_id == affiliate_id,
                 Lead.created_at >= start,
-                Lead.created_at <= end,
+                Lead.created_at < end,
             )
         )
         .group_by(sa.func.date(Lead.created_at))
-        .order_by("date")
+        .order_by(sa.func.date(Lead.created_at))
     )
 
     result = await session.execute(query)
@@ -51,15 +51,15 @@ async def group_by_offer(
         sa.select(
             Offer.id.label("offer_id"),
             Offer.name.label("offer_name"),
-            sa.func.count(Lead.id).label("count"),
-            sa.func.array_agg(Lead.lead_id).label("lead_ids"),
+            sa.func.count(sa.distinct(Lead.lead_id)).label("count"),
+            sa.func.array_agg(sa.distinct(Lead.lead_id)).label("lead_ids"),
         )
         .join(Offer, Lead.offer_id == Offer.id)
         .where(
             sa.and_(
                 Lead.affiliate_id == affiliate_id,
                 Lead.created_at >= start,
-                Lead.created_at <= end,
+                Lead.created_at < end,
             )
         )
         .group_by(Offer.id, Offer.name)
